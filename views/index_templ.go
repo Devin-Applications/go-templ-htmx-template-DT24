@@ -31,7 +31,7 @@ func Index() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto p-4\"><h1 class=\"text-2xl font-bold mb-4 text-white\">Pet Management</h1><form hx-post=\"/add-pet\" hx-target=\"#pet-list\" hx-swap=\"beforeend\" class=\"mb-4\"><input type=\"text\" name=\"name\" placeholder=\"Pet Name\" class=\"border p-2 mr-2\"/><input type=\"text\" name=\"species\" placeholder=\"Species\" class=\"border p-2 mr-2\"/><input type=\"number\" name=\"age\" placeholder=\"Age\" class=\"border p-2 mr-2\"/><button type=\"submit\" class=\"bg-blue-500 text-white p-2 rounded\">Add Pet</button></form><div id=\"pet-list\" class=\"space-y-2\"><!-- Pet list items will be dynamically inserted here --></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto p-4 bg-gray-100 rounded-lg shadow\"><h1 class=\"text-3xl font-bold mb-6 text-gray-800\">Pet Management</h1><form hx-post=\"/add-pet\" hx-target=\"#pet-list\" hx-swap=\"beforeend\" class=\"mb-6 bg-white p-4 rounded shadow\"><div class=\"mb-4\"><label for=\"name\" class=\"block text-sm font-medium text-gray-700 mb-1\">Pet Name</label><input type=\"text\" id=\"name\" name=\"name\" placeholder=\"Enter pet name\" class=\"w-full p-2 border rounded focus:ring focus:ring-blue-300\"/></div><div class=\"mb-4\"><label for=\"species\" class=\"block text-sm font-medium text-gray-700 mb-1\">Species</label><input type=\"text\" id=\"species\" name=\"species\" placeholder=\"Enter species\" class=\"w-full p-2 border rounded focus:ring focus:ring-blue-300\"/></div><div class=\"mb-4\"><label for=\"age\" class=\"block text-sm font-medium text-gray-700 mb-1\">Age</label><input type=\"number\" id=\"age\" name=\"age\" placeholder=\"Enter age\" class=\"w-full p-2 border rounded focus:ring focus:ring-blue-300\"/></div><button type=\"submit\" class=\"w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-200\">Add Pet</button></form><div id=\"pet-list\" class=\"space-y-4\"><!-- Pet list items will be dynamically inserted here --></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -65,7 +65,7 @@ func PetListItem(id string, name string, species string, age int) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"bg-white p-4 rounded shadow\"><p class=\"font-bold\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"pet-card\"><h3 class=\"text-xl font-bold mb-2\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -73,7 +73,7 @@ func PetListItem(id string, name string, species string, age int) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><p>Species: ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h3><p class=\"mb-1\"><strong>Species:</strong> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -81,7 +81,7 @@ func PetListItem(id string, name string, species string, age int) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><p>Age: ")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><p class=\"mb-3\"><strong>Age:</strong> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -89,7 +89,7 @@ func PetListItem(id string, name string, species string, age int) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><button hx-get=\"/edit-pet/")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><div class=\"pet-actions\"><button hx-get=\"/edit-pet/")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -105,7 +105,7 @@ func PetListItem(id string, name string, species string, age int) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\" class=\"bg-yellow-500 text-white p-2 rounded mr-2\">Edit</button><button hx-delete=\"/delete-pet/")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\" class=\"btn btn-edit mr-2\">Edit</button><button hx-delete=\"/delete-pet/")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -121,7 +121,7 @@ func PetListItem(id string, name string, species string, age int) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\" class=\"bg-red-500 text-white p-2 rounded\">Delete</button></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\" class=\"btn btn-delete\">Delete</button></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -155,7 +155,7 @@ func EditPetForm(id string, name string, species string, age int) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><form hx-post=\"/edit-pet/")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"edit-form\"><h2 class=\"text-xl font-bold mb-4\">Edit Pet</h2><form hx-post=\"/edit-pet/")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -171,7 +171,23 @@ func EditPetForm(id string, name string, species string, age int) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\"><input type=\"text\" name=\"name\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\" class=\"space-y-4\"><div class=\"form-group\"><label for=\"name-")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(id))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"form-label\">Pet Name</label><input type=\"text\" id=\"name-")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(id))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" name=\"name\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -179,7 +195,23 @@ func EditPetForm(id string, name string, species string, age int) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" placeholder=\"Pet Name\" required/><input type=\"text\" name=\"species\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"form-input\" required/></div><div class=\"form-group\"><label for=\"species-")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(id))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"form-label\">Species</label><input type=\"text\" id=\"species-")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(id))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" name=\"species\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -187,7 +219,23 @@ func EditPetForm(id string, name string, species string, age int) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" placeholder=\"Species\" required/><input type=\"number\" name=\"age\" value=\"")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"form-input\" required/></div><div class=\"form-group\"><label for=\"age-")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(id))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"form-label\">Age</label><input type=\"number\" id=\"age-")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(id))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" name=\"age\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -195,7 +243,7 @@ func EditPetForm(id string, name string, species string, age int) templ.Componen
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" placeholder=\"Age\" required/><button type=\"submit\">Update Pet</button></form></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"form-input\" required/></div><button type=\"submit\" class=\"btn btn-primary\">Update Pet</button></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

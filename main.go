@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -38,11 +39,20 @@ type Pet struct {
 
 var pets = make(map[string]Pet)
 
+func createLogFile() *os.File {
+	logFile, err := os.OpenFile("server.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatal("Failed to open log file:", err)
+	}
+	return logFile
+}
+
 func addPet(c echo.Context) error {
 	name := c.FormValue("name")
 	species := c.FormValue("species")
 	age, err := strconv.Atoi(c.FormValue("age"))
 	if err != nil {
+		c.Logger().Errorf("Invalid age input: %v", err)
 		return c.String(http.StatusBadRequest, "Invalid age")
 	}
 
@@ -50,12 +60,14 @@ func addPet(c echo.Context) error {
 	pet := Pet{ID: id, Name: name, Species: species, Age: age}
 	pets[id] = pet
 
+	c.Logger().Infof("Pet added: %+v", pet)
 	return c.Render(http.StatusOK, "petListItem", pet)
 }
 
 func deletePet(c echo.Context) error {
 	id := c.Param("id")
 	delete(pets, id)
+	c.Logger().Infof("Pet with ID %s deleted", id)
 	return c.NoContent(http.StatusOK)
 }
 
@@ -65,12 +77,14 @@ func editPet(c echo.Context) error {
 	species := c.FormValue("species")
 	age, err := strconv.Atoi(c.FormValue("age"))
 	if err != nil {
+		c.Logger().Errorf("Invalid age input for edit: %v", err)
 		return c.String(http.StatusBadRequest, "Invalid age")
 	}
 
 	pet := Pet{ID: id, Name: name, Species: species, Age: age}
 	pets[id] = pet
 
+	c.Logger().Infof("Pet edited: %+v", pet)
 	return c.Render(http.StatusOK, "petListItem", pet)
 }
 
@@ -78,8 +92,10 @@ func getEditPetForm(c echo.Context) error {
     id := c.Param("id")
     pet, ok := pets[id]
     if !ok {
+        c.Logger().Warnf("Pet with ID %s not found for editing", id)
         return c.String(http.StatusNotFound, "Pet not found")
     }
+    c.Logger().Infof("Edit form requested for pet: %+v", pet)
     return c.Render(http.StatusOK, "editPetForm", pet)
 }
 
@@ -97,7 +113,11 @@ func (t *TemplRenderer) Render(w io.Writer, name string, data interface{}, c ech
 }
 
 func main() {
+	logFile := createLogFile()
+	defer logFile.Close()
+
 	e := echo.New()
+	e.Logger.SetOutput(logFile)
 	e.GET("/static/*", echo.WrapHandler(http.StripPrefix("/static/", Static())))
 
 	// Register TemplRenderer
@@ -136,7 +156,7 @@ func main() {
 	// Start server
 	go func() {
 		if err := e.Start(fmt.Sprintf(":%s", os.Getenv("PORT"))); err != nil && err != http.ErrServerClosed {
-			e.Logger.Fatal("shutting down the server", err)
+			e.Logger.Error("shutting down the server", err)
 		}
 	}()
 
