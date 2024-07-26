@@ -5,6 +5,7 @@ import (
 	"context"
 	"embed"
 	"fmt"
+	"io"
 	"io/fs"
 	"net/http"
 	"os"
@@ -12,6 +13,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 )
 
@@ -72,14 +74,61 @@ func editPet(c echo.Context) error {
 	return c.Render(http.StatusOK, "petListItem", pet)
 }
 
+func getEditPetForm(c echo.Context) error {
+    id := c.Param("id")
+    pet, ok := pets[id]
+    if !ok {
+        return c.String(http.StatusNotFound, "Pet not found")
+    }
+    return c.Render(http.StatusOK, "editPetForm", pet)
+}
+
+type TemplRenderer struct {
+	templates map[string]func(interface{}) templ.Component
+}
+
+func (t *TemplRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	componentFunc, ok := t.templates[name]
+	if !ok {
+		return fmt.Errorf("template %s not found", name)
+	}
+	component := componentFunc(data)
+	return component.Render(c.Request().Context(), w)
+}
+
 func main() {
 	e := echo.New()
 	e.GET("/static/*", echo.WrapHandler(http.StripPrefix("/static/", Static())))
+
+	// Register TemplRenderer
+	e.Renderer = &TemplRenderer{
+		templates: map[string]func(interface{}) templ.Component{
+			"petListItem": func(data interface{}) templ.Component {
+				pet, ok := data.(Pet)
+				if !ok {
+					return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
+						return fmt.Errorf("invalid data type for petListItem")
+					})
+				}
+				return views.PetListItem(pet.ID, pet.Name, pet.Species, pet.Age)
+			},
+			"editPetForm": func(data interface{}) templ.Component {
+				pet, ok := data.(Pet)
+				if !ok {
+					return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
+						return fmt.Errorf("invalid data type for editPetForm")
+					})
+				}
+				return views.EditPetForm(pet.ID, pet.Name, pet.Species, pet.Age)
+			},
+		},
+	}
 
 	// HTMX handlers
 	e.POST("/add-pet", addPet)
 	e.DELETE("/delete-pet/:id", deletePet)
 	e.POST("/edit-pet/:id", editPet)
+	e.GET("/edit-pet/:id", getEditPetForm)
 
 	// bind views to the server
 	views.Routes(e)
